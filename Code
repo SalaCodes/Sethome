@@ -1,0 +1,30 @@
+command /sethome:
+    trigger:
+        set {home::%player's uuid%} to location of player
+        message "<light blue> Made home"
+ 
+command /home:
+    trigger:
+        if {home::%player's uuid%} is not set:
+            message "<red>You don't have a home!"
+            message "<gray>Use <orange>/sethome <gray>to set your home."
+            stop # does the same thing with 'stop trigger'
+        teleport player to {home::%player's uuid%}
+        message "<dark blue> Teleported"
+		
+command /resethomes:
+    aliases: reset-homes, clearhomes, clear-homes
+    permission: skhomes.admin
+    trigger:
+        set {_count} to the size of {home::*}
+        clear {home::*}
+        send "t;light green>Successfully removed <red>%{_count}% t;light green>homes."
+		
+command /listhomes:
+    aliases: list-homes, homes
+    permission: skhomes.admin
+    trigger:
+        loop {home::*}:
+            # converts the UUID to a player and puts it to the _player variable
+            set {_player} to loop-index parsed as an offline player
+            send "<orange>Home of %{_player}%: <light blue>%loop-value%"
